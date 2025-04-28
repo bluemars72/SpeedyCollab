@@ -10,6 +10,27 @@ Follow these steps to clone the repository, install dependencies, and run the pr
 
 ### 1. Clone the Repository
 
+> **Note for Beginners**:  
+> Before cloning the project, you need to have **Git** installed on your computer.
+> 
+> ### How to check if you already have Git:
+> 1. Open **Command Prompt** (on Windows) or **Terminal** (on Mac/Linux).
+>    - **Windows**: Press `Windows Key + R`, type `cmd`, and hit Enter.
+>    - **Mac**: Press `Command + Space`, type `Terminal`, and hit Enter.
+> 2. Type the following command and press Enter:
+>    ```
+>    git --version
+>    ```
+> 3. If you see a version number (like `git version 2.42.0`), you're ready to continue!
+> 4. If you get an error saying "command not found" or similar, you need to install Git first.
+> 
+> ### How to install Git:
+> - Go to [git-scm.com](https://git-scm.com/) and download the latest version for your operating system (Windows, Mac, or Linux).
+> - Follow the simple installation steps. (The default options are usually fine.)
+> - After installing, **close and reopen** your Command Prompt or Terminal.
+> - Check again with `git --version` to make sure Git is installed properly.
+
+
 First, clone this repository to your local machine by running the following command in your terminal or command prompt:
 
 ```bash
