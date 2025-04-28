@@ -1,6 +1,8 @@
 # SpeedyCollab
 
-SpeedyCollab is a video editing tool by Blue Mars with a simple UI built using Python and Tkinter. It allows you to perform video modifications such as setting the number of iterations and specifying an output file name.
+SpeedyCollab is a video editing tool by Blue Mars with a simple UI built using Python. It uses moviepy and pydub to speed up videos and adjust the pitch for speed videos. 
+
+This is still a work in progress so it may be buggy! It also creates a bunch of temp files in a /tmp folder that you will need to delete when you're done. If you try to run too many iterations it may take a long time.
 
 ## Installation
 
