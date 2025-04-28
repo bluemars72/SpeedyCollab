@@ -1,0 +1,7 @@
+tkinterdnd2
+Pillow
+moviepy
+pydub
+pyaudio
+audioop-lts
+librosa
