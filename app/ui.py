@@ -9,6 +9,9 @@ import time  # For tracking elapsed time
 from . import video_helpers  # Import video_helpers
 import re
 from moviepy import (VideoFileClip, concatenate_videoclips)
+import random
+import subprocess
+import platform
 
 class VideoUI:
     def __init__(self):
@@ -47,6 +50,18 @@ class VideoUI:
         # Label to show selected file
         self.file_label = tk.Label(self.root, text="No file selected", font=self.default_font, wraplength=350)
         self.file_label.pack(pady=20)
+
+        # Dropdown for font color selection
+        self.text_color_label = tk.Label(self.root, text="Select Number Font Color:", font=self.default_font)
+        self.text_color_label.pack(pady=5)
+
+        self.text_color_var = tk.StringVar(self.root)
+        self.text_color_var.set("Red")  # default value
+
+        self.color_options = ["Red", "White", "Blue", "Pink", "Yellow", "Orange", "Green", "Purple", "Random"]
+        self.text_color_menu = tk.OptionMenu(self.root, self.text_color_var, *self.color_options)
+        self.text_color_menu.config(font=self.default_font)
+        self.text_color_menu.pack(pady=5)
 
         # Label for Starting Number
         self.starting_number_label = tk.Label(self.root, text="Enter the Starting Number:", font=self.default_font)
@@ -108,6 +123,13 @@ class VideoUI:
         self.root.drop_target_register(DND_FILES)
         self.root.dnd_bind('<<Drop>>', self.on_drop)
 
+        self.show_folder_button = tk.Button(
+            self.root,
+            text="Show Video Location Folder",
+            font=self.default_font,
+            command=self.open_output_folder
+        )
+
     def browse_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4 *.mov *.avi *.mkv")])
         if file_path:
@@ -116,6 +138,18 @@ class VideoUI:
     def set_selected_file(self, file_path):
         self.selected_file = file_path
         self.file_label.config(text=f"Selected: {file_path}")
+
+    def open_output_folder(self):
+
+        full_path = os.path.abspath(self.final_output_path)
+        print(full_path)
+        print(self.final_output_path)
+        if platform.system() == "Windows":
+            subprocess.run(['explorer', '/select,', full_path])
+        elif platform.system() == "Darwin":  # macOS
+            subprocess.run(['open', '-R', full_path])
+        else:
+            print("Unsupported OS")
 
     def validate_number(self):
         value = self.number_entry.get()
@@ -193,9 +227,10 @@ class VideoUI:
             # Set up (done once)
             input_file_path = self.selected_file
             file_directory = os.path.dirname(input_file_path)
+            current_dir = os.path.dirname(os.path.abspath(__file__))
 
-            final_output_file = self.output_filename_entry.get()
-            temp_folder = os.path.join(file_directory,'tmp')
+            self.final_output_path = os.path.join(file_directory, self.output_filename_entry.get())
+            temp_folder = os.path.join(current_dir,'tmp')
 
             os.makedirs(temp_folder, exist_ok=True)
 
@@ -213,6 +248,7 @@ class VideoUI:
             # Set the maximum value of the progress bar
             self.progress["maximum"] = max_iterations
 
+
             # Iterations (done multiple times)
             for i in range(max_iterations):
                 version_number += 1
@@ -225,9 +261,15 @@ class VideoUI:
                 sped_up_clip = (
                     VideoFileClip(sped_up_clip_file)
                 )
+                self.text_color = self.text_color_var.get()
+
+                if self.text_color.lower() == 'random':
+                    valid_colors = [c for c in self.color_options if c.lower() != "random"]
+                    self.text_color = random.choice(valid_colors)
                 clip_with_number = video_helpers.put_text_on_video(sped_up_clip,
                                                                    text_to_write=f"{version_number}",
-                                                                   font_size=150)
+                                                                   font_size=150,
+                                                                   color=self.text_color)
                 files.append(clip_with_number)
                 initial_clip = clip_with_number
 
@@ -243,12 +285,13 @@ class VideoUI:
 
             final_clip = concatenate_videoclips(files)
 
-            final_clip.write_videofile(os.path.join(file_directory, final_output_file))
+            final_clip.write_videofile(self.final_output_path)
             final_clip.close()
             # Task complete, update the progress bar
             self.progress['value'] = max_iterations
             self.validate_button.config(state="normal")
-            messagebox.showinfo("Task Complete", "The task has finished!")
+            self.show_folder_button.pack(pady=10)
+            messagebox.showinfo("Task Complete", "Speed video has been created!")
 
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter a valid integer for iterations.")
