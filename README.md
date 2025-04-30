@@ -34,7 +34,7 @@ Follow these steps to clone the repository, install dependencies, and run the pr
 First, clone this repository to your local machine by running the following command in your terminal or command prompt:
 
 ```bash
-git clone https://github.com/YourUsername/SpeedyCollab.git
+git clone https://github.com/bluemars72/SpeedyCollab.git
 ```
 
 ### 2. Navigate to the Project Folder
