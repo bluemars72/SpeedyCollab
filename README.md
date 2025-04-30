@@ -1,6 +1,8 @@
 # SpeedyCollab
 
-SpeedyCollab is a video editing tool by Blue Mars with a simple UI built using Python and Tkinter. It allows you to perform video modifications such as setting the number of iterations and specifying an output file name.
+SpeedyCollab is a video editing tool by Blue Mars with a simple UI built using Python. It uses moviepy and pydub to speed up videos and adjust the pitch for speed videos. 
+
+This is still a work in progress so it may be buggy! It also creates a bunch of temp files in a /tmp folder that you will need to delete when you're done. If you try to run too many iterations it may take a long time.
 
 ## Installation
 
@@ -8,10 +10,31 @@ Follow these steps to clone the repository, install dependencies, and run the pr
 
 ### 1. Clone the Repository
 
+> **Note for Beginners**:  
+> Before cloning the project, you need to have **Git** installed on your computer.
+> 
+> ### How to check if you already have Git:
+> 1. Open **Command Prompt** (on Windows) or **Terminal** (on Mac/Linux).
+>    - **Windows**: Press `Windows Key + R`, type `cmd`, and hit Enter.
+>    - **Mac**: Press `Command + Space`, type `Terminal`, and hit Enter.
+> 2. Type the following command and press Enter:
+>    ```
+>    git --version
+>    ```
+> 3. If you see a version number (like `git version 2.42.0`), you're ready to continue!
+> 4. If you get an error saying "command not found" or similar, you need to install Git first.
+> 
+> ### How to install Git:
+> - Go to [git-scm.com](https://git-scm.com/) and download the latest version for your operating system (Windows, Mac, or Linux).
+> - Follow the simple installation steps. (The default options are usually fine.)
+> - After installing, **close and reopen** your Command Prompt or Terminal.
+> - Check again with `git --version` to make sure Git is installed properly.
+
+
 First, clone this repository to your local machine by running the following command in your terminal or command prompt:
 
 ```bash
-git clone https://github.com/YourUsername/SpeedyCollab.git
+git clone https://github.com/bluemars72/SpeedyCollab.git
 ```
 
 ### 2. Navigate to the Project Folder
@@ -32,12 +55,12 @@ python -m venv venv
 
 This creates a venv folder containing the virtual environment. To activate it, use the following command:
 
-####Windows:
+#### Windows:
 ```bash
 .\venv\Scripts\activate
 ```
 
-####Mac/Linux:
+#### Mac/Linux:
 ```bash
     source venv/bin/activate
 ```
