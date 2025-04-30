@@ -55,12 +55,12 @@ python -m venv venv
 
 This creates a venv folder containing the virtual environment. To activate it, use the following command:
 
-####Windows:
+#### Windows:
 ```bash
 .\venv\Scripts\activate
 ```
 
-####Mac/Linux:
+#### Mac/Linux:
 ```bash
     source venv/bin/activate
 ```
