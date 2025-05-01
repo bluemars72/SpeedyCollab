@@ -1,4 +1,5 @@
 import os
+import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -12,6 +13,7 @@ from moviepy import (VideoFileClip, concatenate_videoclips)
 import random
 import subprocess
 import platform
+import traceback
 
 class VideoUI:
     def __init__(self):
@@ -238,6 +240,8 @@ class VideoUI:
                 VideoFileClip(input_file_path)
             )
             files = [initial_clip]
+            stub_files_list = []
+            files_cap_limit = 150
 
             starting_number = int(self.starting_number_entry.get()) if self.starting_number_entry.get() else 1
             version_number = starting_number - 1
@@ -270,7 +274,24 @@ class VideoUI:
                                                                    text_to_write=f"{version_number}",
                                                                    font_size=150,
                                                                    color=self.text_color)
+                if len(files) == files_cap_limit:
+                    print(f"Hit files cap limit on loop: {i}")
+                    stub_clip = concatenate_videoclips(files)
+                    mini_stub_path = os.path.join(temp_folder, f"stub_{i}.mp4")
+                    stub_clip.write_videofile(mini_stub_path)
+                    stub_clip.close()
+                    while files:
+                        mini = files.pop()
+
+                        mini.close()
+
+                    read_stub_clip = (
+                        VideoFileClip(mini_stub_path)
+                    )
+                    stub_files_list.append(read_stub_clip)
+
                 files.append(clip_with_number)
+
                 initial_clip = clip_with_number
 
                 # Update progress bar value
@@ -283,7 +304,7 @@ class VideoUI:
                 # Force UI to update progress bar
                 self.root.update_idletasks()
 
-            final_clip = concatenate_videoclips(files)
+            final_clip = concatenate_videoclips(stub_files_list + files)
 
             final_clip.write_videofile(self.final_output_path)
             final_clip.close()
@@ -293,8 +314,12 @@ class VideoUI:
             self.show_folder_button.pack(pady=10)
             messagebox.showinfo("Task Complete", "Speed video has been created!")
 
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter a valid integer for iterations.")
+        except ValueError as e:
+            messagebox.showerror("Invalid Input", f"{e}")
+            tb = traceback.extract_tb(sys.exc_info()[2])
+            for filename, lineno, func, text in tb:
+                print(f"Error in {filename}, line {lineno}, in {func}")
+                print(f"    {text}")
 
     def update_elapsed_time(self):
         """Update the elapsed time label"""
